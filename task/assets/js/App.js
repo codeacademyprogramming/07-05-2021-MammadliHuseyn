@@ -19,10 +19,10 @@ let setDataToTable = (data) => {
       const tbody = document.getElementById("user-table");
       const row = `<tr>
                      <th scope="row">${idx + 1}</th> 
-                     <td><img src="" class="w-25"/></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td><img src="${user.img}" class="w-25"/></td>
+                     <td>${user.name} ${user.surname}</td>
+                     <td>${user.salary.value} ${user.salary.currency}</td>
+                     <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
                      <td><span class="badge w-50"></span></td>
                      <td>ss</td>
                      <td><button class="btn btn-info w-100 text-white" data-id="${idx + 1}">Details</button></td>
@@ -31,6 +31,14 @@ let setDataToTable = (data) => {
    });
 }
 
+let calculateUserLoan = (loans) => {
+   return loans.reduce((total, loan) => {
+      if (!loan.closed)
+         return total + loan.perMonth.value;
+
+      return total;
+   }, 0)
+}
 
 
 main();
