@@ -16,6 +16,7 @@ async function main() {
 
 let setDataToTable = (data) => {
    data.forEach((user, idx) => {
+      let loanStatus = isActiveLoan(user.loans);
       const tbody = document.getElementById("user-table");
       const row = `<tr>
                      <th scope="row">${idx + 1}</th> 
@@ -23,7 +24,7 @@ let setDataToTable = (data) => {
                      <td>${user.name} ${user.surname}</td>
                      <td>${user.salary.value} ${user.salary.currency}</td>
                      <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
-                     <td><span class="badge w-50"></span></td>
+                     <td><span class="badge ${loanStatus.badgeBg} w-50">${loanStatus.isActive}</span></td>
                      <td>ss</td>
                      <td><button class="btn btn-info w-100 text-white" data-id="${idx + 1}">Details</button></td>
                   </tr>`
@@ -39,6 +40,28 @@ let calculateUserLoan = (loans) => {
       return total;
    }, 0)
 }
+
+let isActiveLoan = (loans) => {
+   let isLoanActive = true;
+   let loanStatus = {
+      "badgeBg": "bg-success",
+      "isActive": "Active"
+   };
+
+   loans.forEach(status => {
+      if (!status.closed)
+         isLoanActive = false;
+   });
+
+   if (isLoanActive)
+      loanStatus = {
+         "badgeBg": "bg-danger",
+         "isActive": "Deactive"
+      }
+
+   return loanStatus;
+}
+
 
 
 main();
