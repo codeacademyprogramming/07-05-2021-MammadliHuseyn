@@ -27,9 +27,10 @@ let setDataToTable = (data) => {
                      <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
                      <td><span class="badge ${loanStatus.badgeBg} w-50">${loanStatus.isActive}</span></td>
                      <td><span class="badge ${loanApplyStatus.badgeBg} w-50">${loanApplyStatus.isActive}</span></td>
-                     <td><button class="btn btn-info w-100 text-white" data-id="${idx + 1}">Details</button></td>
+                     <td><button class="btn btn-info w-100 text-white btn-details" data-id="${idx}">Details</button></td>
                   </tr>`
       tbody.innerHTML += row;
+      showDetailsEventHandler(data);
    });
 }
 
@@ -82,6 +83,47 @@ let canApplyLoan = (loans, salary) => {
       };
 
    return loanStatus;
+}
+
+let showDetailsEventHandler = (data) => {
+   document.querySelectorAll(".btn-details").forEach((btn) => {
+      btn.addEventListener("click", () => {
+         const index = btn.getAttribute("data-id");
+         setDataToModal(data[index]);
+         $("#details-modal").modal("toggle");
+         $(".close-modal").click(() => { $("#details-modal").modal("toggle") });
+      })
+   })
+}
+
+let setDataToModal = (user) => {
+   console.log(user);
+   const tbody = document.getElementById("details-table");
+   tbody.innerHTML = "";
+   let header = document.getElementById("modal-header");
+   header.innerHTML = `<h5 class="modal-title">${user.name} ${user.surname}</h5>`
+   user.loans.forEach(loan => {
+      let perMonth = "no info";
+      let badge = "<span class='badge bg-danger w-100'>Closed</span>"
+
+      if (loan.perMonth != undefined)
+         perMonth = `${loan.perMonth.value} ${loan.perMonth.currency}`;
+
+      if (!loan.closed)
+         badge = "<span class='badge bg-success w-100'>Active</span>";
+
+
+      const row = `<tr>
+                     <td>${loan.loaner}</td>
+                     <td>${loan.amount.value} ${loan.amount.currency}</td>
+                     <td>${badge}</td>
+                     <td>${perMonth}</td>
+                     <td>${loan.dueAmount.value} ${loan.dueAmount.currency}</td>
+                     <td>${loan.loanPeriod.start}</td>
+                     <td>${loan.loanPeriod.end}</td>
+                  </tr>`
+      tbody.innerHTML += row;
+   })
 }
 
 main();

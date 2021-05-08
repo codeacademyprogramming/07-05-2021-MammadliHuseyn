@@ -28,16 +28,53 @@
                         <th scope="col">Total credit pay</th>
                         <th scope="col">Active loan</th>
                         <th scope="col">Can apply</th>
-                        <th scope="col"></th>
+                        <th scope="col"><input type="search" class="form-control" placeholder="ex:Kylie"></th>
                     </tr>
                 </thead>
                 <tbody id="user-table">
-                    
+
                 </tbody>
             </table>
+
+            <!-- Modal -->
+            <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" id="modal-header">
+                            
+                            <button type="button" class="close-modal btn btn-secondary btn-close" data-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Loaner</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Loan status</th>
+                                        <th scope="col">Monthly pay</th>
+                                        <th scope="col">Due amount</th>
+                                        <th scope="col">Start date</th>
+                                        <th scope="col">End date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="details-table">
+                
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="close-modal btn btn-secondary w-100" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/App.js"></script>
 </body>
 
