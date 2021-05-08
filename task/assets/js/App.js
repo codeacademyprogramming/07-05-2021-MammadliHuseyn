@@ -19,7 +19,7 @@ let setDataToTable = (data) => {
       let loanStatus = isActiveLoan(user.loans);
       let loanApplyStatus = canApplyLoan(user.loans, user.salary);
       const tbody = document.getElementById("user-table-body");
-      const row = `<tr>
+      const row = `<tr class="${loanStatus.isActive}-loan">
                      <td scope="row">${idx + 1}</td> 
                      <td><img src="${user.img}" class="w-25"/></td>
                      <td>${user.name} ${user.surname}</td>
@@ -103,7 +103,7 @@ let setDataToModal = (user) => {
    let header = document.getElementById("modal-header");
    header.innerHTML = `<h5 class="modal-title">${user.name} ${user.surname}</h5>`
    user.loans.forEach(loan => {
-      let perMonth = "no info";
+      let perMonth = "N/A";
       let badge = "<span class='badge bg-danger w-100'>Closed</span>"
 
       if (loan.perMonth != undefined)
@@ -127,7 +127,7 @@ let setDataToModal = (user) => {
 }
 
 let searchForName = () => {
-   
+
    let input = document.getElementById("search-input");
    let filter = input.value.toUpperCase();
    let table = document.getElementById("user-table");
@@ -145,6 +145,15 @@ let searchForName = () => {
    }
 }
 
-document.getElementById("search-input").addEventListener('keyup',searchForName);
+let filterForIsActiveLoan = () => {
+   let table = document.getElementById("user-table-body");
+   let rows = table.getElementsByClassName("Deactive-loan");
+   for (const tr of rows) {
+      tr.classList.toggle("d-none");
+   }
+}
+
+document.getElementById('check-active-loan').addEventListener('change', filterForIsActiveLoan);
+document.getElementById("search-input").addEventListener('keyup', searchForName);
 
 main();
