@@ -11,21 +11,24 @@ async function main() {
    data = await getJson(apiUrl)
    console.log(data);
    setDataToTable(data);
+
+   // document.getElementById('check-active-loan').addEventListener('change', filterForIsActiveLoan(data));
 }
 
 
 let setDataToTable = (data) => {
+   const tbody = document.getElementById("user-table-body");
+   tbody.innerHTML = "";
    data.forEach((user, idx) => {
       let loanStatus = isActiveLoan(user.loans);
       let loanApplyStatus = canApplyLoan(user.loans, user.salary);
-      const tbody = document.getElementById("user-table-body");
       const row = `<tr class="${loanStatus.isActive}-loan">
                      <td scope="row">${idx + 1}</td> 
                      <td><img src="${user.img}" class="w-25"/></td>
                      <td>${user.name} ${user.surname}</td>
                      <td>${user.salary.value} ${user.salary.currency}</td>
                      <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
-                     <td><span class="badge ${loanStatus.badgeBg} w-50">${loanStatus.isActive}</span></td>
+                     <td><span class="badge ${(loanStatus ? "bg-danger" : "bg-success")} w-50">${(loanStatus ? "Deactive" : "Active")}</span></td>
                      <td><span class="badge ${loanApplyStatus.badgeBg} w-50">${loanApplyStatus.isActive}</span></td>
                      <td><button class="btn btn-info w-100 text-white btn-details" data-id="${idx}">Details</button></td>
                   </tr>`
@@ -45,23 +48,13 @@ let calculateUserLoan = (loans) => {
 
 let isActiveLoan = (loans) => {
    let isLoanActive = true;
-   let loanStatus = {
-      "badgeBg": "bg-success",
-      "isActive": "Active"
-   };
 
    loans.forEach(status => {
       if (!status.closed)
          isLoanActive = false;
    });
 
-   if (isLoanActive)
-      loanStatus = {
-         "badgeBg": "bg-danger",
-         "isActive": "Deactive"
-      }
-
-   return loanStatus;
+   return isLoanActive;
 }
 
 let canApplyLoan = (loans, salary) => {
@@ -145,15 +138,10 @@ let searchForName = () => {
    }
 }
 
-let filterForIsActiveLoan = () => {
-   let table = document.getElementById("user-table-body");
-   let rows = table.getElementsByClassName("Deactive-loan");
-   for (const tr of rows) {
-      tr.classList.toggle("d-none");
-   }
-}
+// let filterForIsActiveLoan = (data) => {
 
-document.getElementById('check-active-loan').addEventListener('change', filterForIsActiveLoan);
+// }
+
 document.getElementById("search-input").addEventListener('keyup', searchForName);
 
 main();
