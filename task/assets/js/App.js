@@ -17,7 +17,7 @@ async function main() {
 
 
 let setDataToTable = (data) => {
-   const tbody = document.getElementById("user-table-body");
+   let tbody = document.getElementById("user-table-body");
    tbody.innerHTML = "";
    data.forEach((user, idx) => {
       let loanStatus = isActiveLoan(user.loans);
@@ -28,8 +28,8 @@ let setDataToTable = (data) => {
                      <td>${user.name} ${user.surname}</td>
                      <td>${user.salary.value} ${user.salary.currency}</td>
                      <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
-                     <td><span class="badge ${(loanStatus ? "bg-danger" : "bg-success")} w-50">${(loanStatus ? "Deactive" : "Active")}</span></td>
-                     <td><span class="badge ${loanApplyStatus.badgeBg} w-50">${loanApplyStatus.isActive}</span></td>
+                     <td><span class="badge ${(loanStatus ? "bg-danger" : "bg-success")} w-50">${(loanStatus ? "Closed" : "Active")}</span></td>
+                     <td><span class="badge ${(loanApplyStatus? "bg-danger" : "bg-success")} w-75">${(loanApplyStatus ? "Not permitted" : "Permitted")}</span></td>
                      <td><button class="btn btn-info w-100 text-white btn-details" data-id="${idx}">Details</button></td>
                   </tr>`
       tbody.innerHTML += row;
@@ -61,21 +61,7 @@ let canApplyLoan = (loans, salary) => {
    let totalLoans = calculateUserLoan(loans);
    let isApply = salary * 45 / 100 > totalLoans;
 
-   let loanStatus;
-
-   if (!isApply)
-      loanStatus = {
-         "badgeBg": "bg-success",
-         "isActive": "Active"
-      };
-
-   else
-      loanStatus = {
-         "badgeBg": "bg-danger",
-         "isActive": "Deactive"
-      };
-
-   return loanStatus;
+   return isApply;
 }
 
 let showDetailsEventHandler = (data) => {
