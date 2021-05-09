@@ -1,5 +1,4 @@
-let data = [];
-let apiUrl = "data/data.json";
+const apiUrl = "data/data.json";
 
 async function getJson(url) {
    let response = await fetch(url);
@@ -8,28 +7,27 @@ async function getJson(url) {
 }
 
 async function main() {
-   data = await getJson(apiUrl)
+   const data = await getJson(apiUrl)
    setDataToTable(data);
 
    document.getElementById('check-active-loan').addEventListener('change', () => filterTable(data));
    document.getElementById("search-input").addEventListener('keyup', () => filterTable(data));
 }
 
-
 let setDataToTable = (data) => {
    let tbody = document.getElementById("user-table-body");
    tbody.innerHTML = "";
    data.forEach((user, idx) => {
       let loanStatus = isActiveLoan(user.loans);
-      let loanApplyStatus = canApplyLoan(user.loans, user.salary);
-      const row = `<tr class="${loanStatus.isActive}-loan">
+      let loanApplyStatus = canApplyLoan(user.loans, user.salary.value);
+      const row = `<tr>
                      <td scope="row">${idx + 1}</td> 
                      <td><img src="${user.img}" class="w-25"/></td>
                      <td>${user.name} ${user.surname}</td>
                      <td>${user.salary.value} ${user.salary.currency}</td>
                      <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
                      <td><span class="badge ${(loanStatus ? "bg-danger" : "bg-success")} w-50">${(loanStatus ? "Closed" : "Active")}</span></td>
-                     <td><span class="badge ${(loanApplyStatus ? "bg-danger" : "bg-success")} w-75">${(loanApplyStatus ? "Not permitted" : "Permitted")}</span></td>
+                     <td><span class="badge ${(loanApplyStatus ? "bg-success" : "bg-danger")} w-75">${(loanApplyStatus ? "Permitted" : "Not permitted")}</span></td>
                      <td><button class="btn btn-info w-100 text-white btn-details" data-id="${idx}">Details</button></td>
                   </tr>`
       tbody.innerHTML += row;
@@ -59,7 +57,7 @@ let isActiveLoan = (loans) => {
 
 let canApplyLoan = (loans, salary) => {
    let totalLoans = calculateUserLoan(loans);
-   let isApply = salary * 45 / 100 > totalLoans;
+   let isApply = (salary * 45 / 100) > totalLoans;
 
    return isApply;
 }
