@@ -9,10 +9,10 @@ async function getJson(url) {
 
 async function main() {
    data = await getJson(apiUrl)
-   console.log(data);
    setDataToTable(data);
 
-   // document.getElementById('check-active-loan').addEventListener('change', filterForIsActiveLoan(data));
+   document.getElementById('check-active-loan').addEventListener('change', () => filterTable(data));
+   document.getElementById("search-input").addEventListener('keyup', () => filterTable(data));
 }
 
 
@@ -29,7 +29,7 @@ let setDataToTable = (data) => {
                      <td>${user.salary.value} ${user.salary.currency}</td>
                      <td>${calculateUserLoan(user.loans)} ${user.loans[0].amount.currency}</td>
                      <td><span class="badge ${(loanStatus ? "bg-danger" : "bg-success")} w-50">${(loanStatus ? "Closed" : "Active")}</span></td>
-                     <td><span class="badge ${(loanApplyStatus? "bg-danger" : "bg-success")} w-75">${(loanApplyStatus ? "Not permitted" : "Permitted")}</span></td>
+                     <td><span class="badge ${(loanApplyStatus ? "bg-danger" : "bg-success")} w-75">${(loanApplyStatus ? "Not permitted" : "Permitted")}</span></td>
                      <td><button class="btn btn-info w-100 text-white btn-details" data-id="${idx}">Details</button></td>
                   </tr>`
       tbody.innerHTML += row;
@@ -105,29 +105,20 @@ let setDataToModal = (user) => {
    })
 }
 
-let searchForName = () => {
+let filterTable = (data) => {
+   let input = $('#search-input').val().toUpperCase();
 
-   let input = document.getElementById("search-input");
-   let filter = input.value.toUpperCase();
-   let table = document.getElementById("user-table");
-   let tr = table.getElementsByTagName("tr");
-   for (i = 0; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("td")[2];
-      if (td) {
-         let txtValue = td.textContent || td.innerText;
-         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-         } else {
-            tr[i].style.display = "none";
-         }
-      }
-   }
+   //filter for search input
+   if (input)
+      data = data.filter(user => `${user.name} ${user.surname}`.toUpperCase().includes(input));
+
+   //filter for active loan 
+   if ($("#check-active-loan").prop('checked'))
+      data = data.filter(user => !isActiveLoan(user.loans)).map((user) => {
+         return user;
+      })
+
+   setDataToTable(data);
 }
-
-// let filterForIsActiveLoan = (data) => {
-
-// }
-
-document.getElementById("search-input").addEventListener('keyup', searchForName);
 
 main();
