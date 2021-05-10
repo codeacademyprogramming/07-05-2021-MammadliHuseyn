@@ -11,10 +11,10 @@
 //SessionStorage creator
 const createSessionStorage = (user) => {
     let session_user = {
-        username:user.username,
-        email:user.email
+        username: user.username,
+        email: user.email
     };
-    sessionStorage.setItem("session_user",JSON.stringify(session_user));
+    sessionStorage.setItem("session_user", JSON.stringify(session_user));
 }
 
 //Admin username password object for login

@@ -302,7 +302,7 @@
                     "value": 240000,
                     "currency": "AZN"
                 },
-                "closed": true,
+                "closed": false,
                 "loaner": "Example bank",
                 "period": {
                     "type": "month",
